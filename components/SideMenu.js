@@ -34,10 +34,10 @@ class SideMenu extends Component {
     return (
         <View style={styles.sideMenuContainer}>
         {/*Top Large Image */}
-        <Image
-          source={{ uri: this.proileImage }}
+        {/* <Image
+          source={{uri: 'asset:/user.png'}} 
           style={styles.sideMenuProfileIcon}
-        />
+        /> */}
         {/*Divider between Top Image and Sidebar Option*/}
         <View
           style={{
@@ -90,6 +90,7 @@ const styles = StyleSheet.create({
       paddingTop: 20,
     },
     sideMenuProfileIcon: {
+      borderColor:"#000000",
       resizeMode: 'center',
       width: 150,
       height: 150,

@@ -19,12 +19,16 @@ import {
   YellowBox,
   Dimensions,
   Button,
+  ScrollView,
 } from 'react-native';
+
+import SafeAreaView from 'react-native-safe-area-view';
 
 //For React Navigation 4+
 import {createAppContainer} from 'react-navigation';
 import {createDrawerNavigator} from 'react-navigation-drawer';
 import {createStackNavigator} from 'react-navigation-stack';
+import { createSwitchNavigator } from 'react-navigation';
 
 
 //Import all the screens
@@ -32,14 +36,20 @@ import Screen1 from '././components/Screen1';
 import Screen2 from '././components/Screen2';
 import Screen3 from '././components/Screen3';
 
+import Login from '././components/Login';
+
+
+
 //Import custom Drawer / sidebar
 import SideMenu from './components/SideMenu';
 
 //Navigation Drawer Structure for all screen
 class NavigationDrawerStructure extends Component {
+
   toggleDrawer = () => {
     this.props.navigationProps.toggleDrawer();
   };
+
   render() {
     return (
       <View style={{ flexDirection: 'row' }}>
@@ -47,7 +57,7 @@ class NavigationDrawerStructure extends Component {
           {/*Donute Button Image */}
           <Image
             source={require('./assets/menu.png')}
-            style={{ width: 25, height: 25, marginLeft: 10 }}
+            style={styles.navbar}
           />
         </TouchableOpacity>
       </View>
@@ -64,7 +74,7 @@ const FirstActivity_StackNavigator = createStackNavigator({
       title: 'Demo Screen 1',
       headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
       headerStyle: {
-        backgroundColor: '#FF9800',
+        backgroundColor: '#673ab7',
       },
       headerTintColor: '#fff',
     }),
@@ -81,7 +91,7 @@ const Screen2_StackNavigator = createStackNavigator({
       headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
  
       headerStyle: {
-        backgroundColor: '#FF9800',
+        backgroundColor: '#673ab7',
       },
       headerTintColor: '#fff',
     }),
@@ -97,7 +107,7 @@ const Screen3_StackNavigator = createStackNavigator({
       title: 'Demo Screen 3',
       headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
       headerStyle: {
-        backgroundColor: '#FF9800',
+        backgroundColor: '#673ab7',
       },
       headerTintColor: '#fff',
     }),
@@ -114,12 +124,37 @@ const Drawer = createDrawerNavigator(
   },
   {
     contentComponent: SideMenu,
-    drawerWidth: Dimensions.get('window').width - 120,
+    drawerWidth: Dimensions.get('window').width - 120,   
+    drawerPosition:"right"
   }
 );
 
+const AuthNavigator = createStackNavigator(
+  {
+    Login: Login,
+  },
+  {
+    navigationOptions: {
+      header: null,
+    },
+  }
+);
 
-const MyApp = createAppContainer(Drawer);
+const AppNavigator = createSwitchNavigator(
+  {
+    //  Splash: {
+    //    getScreen: () => require('./SplashScreen').default,
+    //  },
+     Auth: AuthNavigator,
+     Main: Drawer,
+   },
+   {
+     initialRouteName: 'Main',
+   },
+ );
+
+
+const MyApp = createAppContainer(AppNavigator);
 
 
 
@@ -132,5 +167,14 @@ class App extends React.Component {
     );
   }
 }
+
+
+const styles = StyleSheet.create({
+  navbar: {
+    width: 25,
+    height: 25, 
+    marginLeft: 15,   
+  },
+});
 
 export default App;
