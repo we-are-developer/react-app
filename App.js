@@ -5,28 +5,39 @@
  * @format
  * @flow
  */
-import 'react-native-gesture-handler';
 
-import React,{ Component }  from 'react';
-import {View, Text,Image, TouchableOpacity} from 'react-native';
 
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+/*Example of Navigation Drawer with Sectioned Menu*/
+import React, { Component } from 'react';
+import {
+  StyleSheet,
+  Platform,
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  YellowBox,
+  Dimensions,
+  Button,
+} from 'react-native';
 
-import SafeAreaView from 'react-native-safe-area-view';
-
+//For React Navigation 4+
 import {createAppContainer} from 'react-navigation';
 import {createDrawerNavigator} from 'react-navigation-drawer';
 import {createStackNavigator} from 'react-navigation-stack';
 
 
+//Import all the screens
 import Screen1 from '././components/Screen1';
 import Screen2 from '././components/Screen2';
 import Screen3 from '././components/Screen3';
 
+//Import custom Drawer / sidebar
+import SideMenu from './components/SideMenu';
+
+//Navigation Drawer Structure for all screen
 class NavigationDrawerStructure extends Component {
-  //Structure for the navigatin Drawer
   toggleDrawer = () => {
-    //Props to open/close the drawer
     this.props.navigationProps.toggleDrawer();
   };
   render() {
@@ -35,8 +46,8 @@ class NavigationDrawerStructure extends Component {
         <TouchableOpacity onPress={this.toggleDrawer.bind(this)}>
           {/*Donute Button Image */}
           <Image
-            source={{uri: 'asset:/menu.png'}} 
-            style={{ width: 25, height: 25, marginLeft: 5 }}
+            source={require('./assets/menu.png')}
+            style={{ width: 25, height: 25, marginLeft: 10 }}
           />
         </TouchableOpacity>
       </View>
@@ -44,8 +55,9 @@ class NavigationDrawerStructure extends Component {
   }
 }
  
+//Stack Navigator for the First Option of Navigation Drawer
 const FirstActivity_StackNavigator = createStackNavigator({
-  //All the screen from the Screen1 will be indexed here
+  //All the screen from the First Option will be indexed here
   First: {
     screen: Screen1,
     navigationOptions: ({ navigation }) => ({
@@ -59,13 +71,15 @@ const FirstActivity_StackNavigator = createStackNavigator({
   },
 });
  
+//Stack Navigator for the Second Option of Navigation Drawer
 const Screen2_StackNavigator = createStackNavigator({
-  //All the screen from the Screen2 will be indexed here
+  //All the screen from the Second Option will be indexed here
   Second: {
     screen: Screen2,
     navigationOptions: ({ navigation }) => ({
       title: 'Demo Screen 2',
       headerLeft: <NavigationDrawerStructure navigationProps={navigation} />,
+ 
       headerStyle: {
         backgroundColor: '#FF9800',
       },
@@ -74,8 +88,9 @@ const Screen2_StackNavigator = createStackNavigator({
   },
 });
  
+//Stack Navigator for the Third Option of Navigation Drawer
 const Screen3_StackNavigator = createStackNavigator({
-  //All the screen from the Screen3 will be indexed here
+  //All the screen from the Third Option will be indexed here
   Third: {
     screen: Screen3,
     navigationOptions: ({ navigation }) => ({
@@ -89,46 +104,31 @@ const Screen3_StackNavigator = createStackNavigator({
   },
 });
  
-const DrawerNavigatorExample = createDrawerNavigator({
-  //Drawer Optons and indexing
-  Screen1: {
-    //Title
-    screen: FirstActivity_StackNavigator,
-    navigationOptions: {
-      drawerLabel: 'Demo Screen 1',
-    },
+//Drawer Navigator for the Navigation Drawer / Sidebar
+const Drawer = createDrawerNavigator(
+  {
+    //Drawer Optons and indexing
+    NavScreen1: { screen: FirstActivity_StackNavigator },
+    NavScreen2: { screen: Screen2_StackNavigator },
+    NavScreen3: { screen: Screen3_StackNavigator },
   },
-  Screen2: {
-    //Title
-    screen: Screen2_StackNavigator,
-    navigationOptions: {
-      drawerLabel: 'Demo Screen 2',
-    },
-  },
-  Screen3: {
-    //Title
-    screen: Screen3_StackNavigator,
-    navigationOptions: {
-      drawerLabel: 'Demo Screen 3',
-    },
-  },
-});
+  {
+    contentComponent: SideMenu,
+    drawerWidth: Dimensions.get('window').width - 120,
+  }
+);
 
 
-const MyApp = createAppContainer(DrawerNavigatorExample);
+const MyApp = createAppContainer(Drawer);
 
 
 
 class App extends React.Component {
   render() {
-    return (
-      <SafeAreaProvider>
-        <SafeAreaView style={{ flex: 1 }}>
+    return (     
         <View style={{ flex: 1 }}>
           <MyApp/>
-        </View>
-        </SafeAreaView>
-        </SafeAreaProvider>
+        </View>      
     );
   }
 }
