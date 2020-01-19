@@ -36,6 +36,8 @@ target 'deepbase' do
 
   pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
 
+  pod 'react-native-safe-area-context', :path => '../node_modules/react-native-safe-area-context'
+
   target 'deepbaseTests' do
     inherit! :search_paths
     # Pods for testing
